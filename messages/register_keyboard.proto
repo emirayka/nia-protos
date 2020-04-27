@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message RegisterKeyboardRequest {
+    string device = 1;
+}
+
+message RegisterKeyboardResponse {
+    message SuccessResult {
+        int32 keyboard_id = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message GetDeviceInfoRequest {
+    string device = 1;
+}
+
+message GetDeviceInfoResponse {
+    message SuccessResult {
+        string device = 1;
+        string name = 2;
+        string model = 3;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}

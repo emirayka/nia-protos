@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message StopListeningRequest {
+}
+
+message StopListeningResponse {
+    message SuccessResult {
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}

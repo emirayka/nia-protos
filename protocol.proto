@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+// handshake
+message HandshakeRequest {
+}
+
+message HandshakeResponse {
+    message SuccessResult {
+        string version = 1;
+        string info = 2;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}
+
+// get devices
+message GetDevicesRequest {
+}
+
+message GetDevicesResponse {
+    message SuccessResult {
+        repeated string devices = 1;
+    }
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}
+
+// get device info
+message GetDeviceInfoRequest {
+    string device = 1;
+}
+
+message GetDeviceInfoResponse {
+    message SuccessResult {
+        string device = 1;
+        string name = 2;
+        string model = 3;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}
+
+// execute code
+message ExecuteCodeRequest {
+    string code = 1;
+}
+
+message ExecuteCodeResponse {
+    message SuccessResult {
+        string execution_result = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// request, response
+message Request {
+    oneof request {
+        HandshakeRequest handshake_request = 1;
+        GetDevicesRequest get_devices_request = 2;
+        GetDeviceInfoRequest get_device_info_request = 3;
+        ExecuteCodeRequest execute_code_request = 4;
+    }
+}
+
+message Response {
+    oneof request {
+        HandshakeResponse handshake_response = 1;
+        GetDevicesResponse get_devices_response = 2;
+        GetDeviceInfoResponse get_device_info_response = 3;
+        ExecuteCodeResponse execute_code_response = 4;
+    }
+}

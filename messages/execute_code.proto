@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+message ExecuteCodeRequest {
+    string code = 1;
+}
+
+message ExecuteCodeResponse {
+    message SuccessResult {
+        string execution_result = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}

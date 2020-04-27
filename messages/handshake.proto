@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message HandshakeRequest {
+}
+
+message HandshakeResponse {
+    message SuccessResult {
+        string version = 1;
+        string info = 2;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+    }
+}
