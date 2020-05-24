@@ -1,5 +1,146 @@
 syntax = "proto3";
 
+// actions
+message ActionKeyPress {
+    int32 key_code = 1;
+}
+
+message ActionKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionKeyRelease {
+    int32 key_code = 1;
+}
+
+message ActionMouseButtonPress {
+    int32 button_code = 1;
+}
+
+message ActionMouseButtonClick {
+    int32 button_code = 1;
+}
+
+message ActionMouseButtonRelease {
+    int32 button_code = 1;
+}
+
+message ActionMouseRelativeMove {
+    int32 dx = 1;
+    int32 dy = 2;
+}
+
+message ActionMouseAbsoluteMove {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message ActionWait {
+    int32 ms = 1;
+}
+
+message ActionTextType {
+    string text = 1;
+}
+
+message ActionExecuteCode {
+    string code = 1;
+}
+
+message ActionExecuteFunction {
+    string function_name = 1;
+}
+
+message ActionExecuteOSCommand {
+    string os_command = 1;
+}
+
+message Action {
+    oneof action {
+        ActionKeyPress action_key_press = 1;
+        ActionKeyClick action_key_click = 2;
+        ActionKeyRelease action_key_release = 3;
+
+        ActionMouseButtonPress action_mouse_button_press = 4;
+        ActionMouseButtonClick action_mouse_button_click = 5;
+        ActionMouseButtonRelease action_mouse_button_release = 6;
+
+        ActionMouseRelativeMove action_mouse_relative_move = 7;
+        ActionMouseAbsoluteMove action_mouse_absolute_move = 8;
+
+        ActionTextType action_text_type = 9;
+        ActionWait action_wait = 10;
+
+        ActionExecuteCode action_execute_code = 11;
+        ActionExecuteFunction action_execute_function = 12;
+        ActionExecuteOSCommand action_execute_os_command = 13;
+    }
+}
+
+message NamedAction {
+    string action_name = 1;
+    Action action = 2;
+}
+
+message ActionList {
+    repeated Action actions = 1;
+}
+
+// keys
+message Key1 {
+    int32 key_code = 1;
+}
+
+message Key2 {
+    int32 device_id = 1;
+    int32 key_code = 2;
+}
+
+message Key {
+    oneof key {
+        Key1 key_1 =  1;
+        Key2 key_2 =  2;
+    }
+}
+
+message ModifierDescription {
+    Key key = 1;
+    string alias = 2;
+}
+
+message KeyChord {
+    repeated Key modifiers = 1;
+    Key ordinary_key = 2;
+}
+
+message Mapping {
+    repeated KeyChord key_chords = 1;
+    Action action = 2;
+}
+
+// Device
+message KeyDescription {
+    int32 x = 1;
+    int32 y = 2;
+    int32 width = 3;
+    int32 height = 4;
+    int32 key_code = 5;
+}
+
+message DeviceModel {
+    repeated KeyDescription key_descriptions = 1;
+    int32 device_width = 2;
+    int32 device_height = 3;
+}
+
+message DeviceInfo {
+    int32 device_id = 1;
+    bool defined = 2;
+    string device_path = 3;
+    string device_name = 4;
+    DeviceModel device_model = 5;
+}
+
 // handshake
 message HandshakeRequest {
 }
@@ -8,66 +149,6 @@ message HandshakeResponse {
     message SuccessResult {
         string version = 1;
         string info = 2;
-    }
-
-    message ErrorResult {
-        string message = 1;
-    }
-
-    oneof result {
-        SuccessResult success_result = 1;
-        ErrorResult error_result = 2;
-    }
-}
-
-// get devices
-message GetDevicesRequest {
-}
-
-message GetDevicesResponse {
-    message SuccessResult {
-        repeated string devices = 1;
-    }
-    message ErrorResult {
-        string message = 1;
-    }
-
-    oneof result {
-        SuccessResult success_result = 1;
-        ErrorResult error_result = 2;
-    }
-}
-
-// get device info
-message GetDeviceInfoRequest {
-    string device = 1;
-}
-
-message GetDeviceInfoResponse {
-    message SuccessResult {
-        string device = 1;
-        string name = 2;
-        string model = 3;
-    }
-
-    message ErrorResult {
-        string message = 1;
-    }
-
-    oneof result {
-        SuccessResult success_result = 1;
-        ErrorResult error_result = 2;
-    }
-}
-
-// execute code
-message ExecuteCodeRequest {
-    string code = 1;
-}
-
-message ExecuteCodeResponse {
-    message SuccessResult {
-        string execution_result = 1;
     }
 
     message ErrorResult {
@@ -85,21 +166,531 @@ message ExecuteCodeResponse {
     }
 }
 
-// request, response
+// get devices
+message GetDevicesRequest {
+}
+
+message GetDevicesResponse {
+    message SuccessResult {
+        repeated DeviceInfo devices_info = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// execute code
+message ExecuteCodeRequest {
+    string code = 1;
+}
+
+message ExecuteCodeResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// define device
+message DefineDeviceRequest {
+    int32 device_id = 1;
+}
+
+message DefineDeviceResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// remove device by path
+message RemoveDeviceByPathRequest {
+    string device_path = 1;
+}
+
+message RemoveDeviceByPathResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// remove device by name
+message RemoveDeviceByNameRequest {
+    string device_name = 1;
+}
+
+message RemoveDeviceByNameResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+message RemoveDeviceByIdRequest {
+    int32 device_id = 1;
+}
+
+message RemoveDeviceByIdResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Get Defined Modifiers
+message GetDefinedModifiersRequest {
+}
+
+message GetDefinedModifiersResponse {
+    message SuccessResult {
+        repeated ModifierDescription modifier_descriptions = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Define modifier
+message DefineModifierRequest {
+    ModifierDescription modifier = 1;
+}
+
+message DefineModifierResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Remove modifier
+message RemoveModifierRequest {
+    Key modifier_key = 1;
+}
+
+message RemoveModifierResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Get defined actions
+message GetDefinedActionsRequest {
+}
+
+message GetDefinedActionsResponse {
+    message SuccessResult {
+        repeated NamedAction named_actions = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Define action
+message DefineActionRequest {
+    NamedAction action = 1;
+}
+
+message DefineActionResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Remove action
+message RemoveActionRequest {
+    string action_name = 1;
+}
+
+message RemoveActionResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Get mappings
+message GetDefinedMappingsRequest {
+}
+
+message GetDefinedMappingsResponse {
+    message SuccessResult {
+        repeated Mapping mappings = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Define key mapping
+message DefineMappingRequest {
+    Mapping mapping = 1;
+}
+
+message DefineMappingResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Change mapping
+message ChangeMappingRequest {
+    repeated KeyChord key_chords = 1;
+    Action action = 2;
+}
+
+message ChangeMappingResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Remove key mapping
+message RemoveMappingRequest {
+    repeated KeyChord key_chords = 1;
+}
+
+message RemoveMappingResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// Is listening
+message IsListeningRequest {
+}
+
+message IsListeningResponse {
+    message SuccessResult {
+        bool is_listening = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// start listening
+message StartListeningRequest {
+}
+
+message StartListeningResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// stop listening
+message StopListeningRequest {
+}
+
+message StopListeningResponse {
+    message SuccessResult {
+        string message = 1;
+    }
+
+    message ErrorResult {
+        string message = 1;
+    }
+
+    message FailureResult {
+        string message = 1;
+    }
+
+    oneof result {
+        SuccessResult success_result = 1;
+        ErrorResult error_result = 2;
+        FailureResult failure_result = 3;
+    }
+}
+
+// request and response
 message Request {
     oneof request {
         HandshakeRequest handshake_request = 1;
         GetDevicesRequest get_devices_request = 2;
-        GetDeviceInfoRequest get_device_info_request = 3;
-        ExecuteCodeRequest execute_code_request = 4;
+        ExecuteCodeRequest execute_code_request = 3;
+
+        DefineDeviceRequest define_device_request = 4;
+        RemoveDeviceByPathRequest remove_device_by_path_request = 5;
+        RemoveDeviceByNameRequest remove_device_by_name_request = 6;
+        RemoveDeviceByIdRequest remove_device_by_id_request = 7;
+
+        GetDefinedModifiersRequest get_defined_modifiers_request = 8;
+        DefineModifierRequest define_modifier_request = 9;
+        RemoveModifierRequest remove_modifier_request = 10;
+
+        GetDefinedActionsRequest get_defined_actions_request = 11;
+        DefineActionRequest define_action_request = 12;
+        RemoveActionRequest remove_action_request = 13;
+
+        GetDefinedMappingsRequest get_defined_mappings_request = 14;
+        DefineMappingRequest define_mapping_request = 15;
+        ChangeMappingRequest change_mapping_request = 16;
+        RemoveMappingRequest remove_mapping_request = 17;
+
+        IsListeningRequest is_listening_request = 18;
+        StartListeningRequest start_listening_request = 19;
+        StopListeningRequest stop_listening_request = 20;
     }
 }
 
 message Response {
-    oneof request {
+    oneof response {
         HandshakeResponse handshake_response = 1;
         GetDevicesResponse get_devices_response = 2;
-        GetDeviceInfoResponse get_device_info_response = 3;
-        ExecuteCodeResponse execute_code_response = 4;
+        ExecuteCodeResponse execute_code_response = 3;
+
+        DefineDeviceResponse define_device_response = 4;
+        RemoveDeviceByPathResponse remove_device_by_path_response = 5;
+        RemoveDeviceByNameResponse remove_device_by_name_response = 6;
+        RemoveDeviceByIdResponse remove_device_by_id_response = 7;
+
+        GetDefinedModifiersResponse get_defined_modifiers_response = 8;
+        DefineModifierResponse define_modifier_response = 9;
+        RemoveModifierResponse remove_modifier_response = 10;
+
+        GetDefinedActionsResponse get_defined_actions_response = 11;
+        DefineActionResponse define_action_response = 12;
+        RemoveActionResponse remove_action_response = 13;
+
+        GetDefinedMappingsResponse get_defined_mappings_response = 14;
+        DefineMappingResponse define_mapping_response = 15;
+        ChangeMappingResponse change_mapping_response = 16;
+        RemoveMappingResponse remove_mapping_response = 17;
+
+        IsListeningResponse is_listening_response = 18;
+        StartListeningResponse start_listening_response = 19;
+        StopListeningResponse stop_listening_response = 20;
     }
 }
