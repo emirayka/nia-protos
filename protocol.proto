@@ -25,6 +25,34 @@ message ActionMouseButtonRelease {
     int32 button_code = 1;
 }
 
+message ActionTextKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionNumberKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionFunctionKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionControlKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionKPKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionMultimediaKeyClick {
+    int32 key_code = 1;
+}
+
+message ActionMouseButtonKeyClick {
+    int32 key_code = 1;
+}
+
 message ActionMouseRelativeMove {
     int32 dx = 1;
     int32 dy = 2;
@@ -55,6 +83,10 @@ message ActionExecuteOSCommand {
     string os_command = 1;
 }
 
+message ActionExecuteNamedAction {
+    string action_name = 1;
+}
+
 message Action {
     oneof action {
         ActionKeyPress action_key_press = 1;
@@ -65,15 +97,24 @@ message Action {
         ActionMouseButtonClick action_mouse_button_click = 5;
         ActionMouseButtonRelease action_mouse_button_release = 6;
 
-        ActionMouseRelativeMove action_mouse_relative_move = 7;
-        ActionMouseAbsoluteMove action_mouse_absolute_move = 8;
+        ActionTextKeyClick action_text_key_click = 7;
+        ActionNumberKeyClick action_number_key_click = 8;
+        ActionFunctionKeyClick action_function_key_click = 9;
+        ActionControlKeyClick action_control_key_click = 10;
+        ActionKPKeyClick action_kp_key_click = 11;
+        ActionMultimediaKeyClick action_multimedia_key_click = 12;
+        ActionMouseButtonKeyClick action_mouse_button_key_click = 13;
 
-        ActionTextType action_text_type = 9;
-        ActionWait action_wait = 10;
+        ActionMouseRelativeMove action_mouse_relative_move = 14;
+        ActionMouseAbsoluteMove action_mouse_absolute_move = 15;
 
-        ActionExecuteCode action_execute_code = 11;
-        ActionExecuteFunction action_execute_function = 12;
-        ActionExecuteOSCommand action_execute_os_command = 13;
+        ActionTextType action_text_type = 16;
+        ActionWait action_wait = 17;
+
+        ActionExecuteCode action_execute_code = 18;
+        ActionExecuteFunction action_execute_function = 19;
+        ActionExecuteOSCommand action_execute_os_command = 20;
+        ActionExecuteNamedAction action_execute_named_action = 21;
     }
 }
 
