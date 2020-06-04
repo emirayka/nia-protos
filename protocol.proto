@@ -87,6 +87,9 @@ message ActionExecuteNamedAction {
     string action_name = 1;
 }
 
+message ActionExecuteInterpreterValue {
+}
+
 message Action {
     oneof action {
         ActionKeyPress action_key_press = 1;
@@ -115,6 +118,7 @@ message Action {
         ActionExecuteFunction action_execute_function = 19;
         ActionExecuteOSCommand action_execute_os_command = 20;
         ActionExecuteNamedAction action_execute_named_action = 21;
+        ActionExecuteInterpreterValue action_execute_interpreter_value = 22;
     }
 }
 
